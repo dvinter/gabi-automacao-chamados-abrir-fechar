@@ -1,0 +1,736 @@
+<html>
+
+<head>
+	<meta charset="utf-8" />
+	<style>
+		#contentParent * {
+			-webkit-box-sizing: border-box;
+			-moz-box-sizing: border-box;
+			box-sizing: border-box;
+			outline: none;
+		}
+
+		body {
+			font-family: Arial, sans-serif;
+			margin: 0;
+			padding: 0;
+			background-image: url("../img/bg.png");
+			background-size: cover;
+			background-position: top center;
+		}
+
+		#contentParent.closed-chat {
+			width: 0;
+			height: 0;
+			position: fixed;
+			bottom: 0;
+			right: 0;
+			cursor: pointer;
+		}
+
+		#contentParent.closed-chat:before {
+			left: auto;
+			right: 30px;
+			top: auto;
+			bottom: 30px;
+			width: 75px;
+			height: 77px;
+		}
+
+		#contentParent.closed-chat:after {
+			content: "Posso te ajudar?";
+			font-size: 12px;
+			position: absolute;
+			right: 13px;
+			bottom: 10px;
+			width: 100px;
+		}
+
+		#contentParent div {
+			word-wrap: break-word;
+		}
+
+		#contentParent #view-change-button {
+			display: inline-block;
+			position: absolute;
+			width: 3.125rem;
+			height: 3.125rem;
+			border-radius: 1.5625rem;
+			background: #AB72F8;
+			top: 0.3125rem;
+			right: 0.3125rem;
+			line-height: 3.125rem;
+			vertical-align: middle;
+		}
+
+		#contentParent #view-change-button img {
+			display: none;
+			width: 100%;
+			height: 100%;
+			vertical-align: middle;
+		}
+
+		#contentParent #view-change-button:not(.full) .not-full {
+			display: inline-block;
+		}
+
+		#contentParent #view-change-button.full .full {
+			display: inline-block;
+		}
+
+		#contentParent {
+			height: 370px;
+			position: fixed;
+			bottom: 0;
+			right: 50px;
+		}
+
+		#contentParent:before {
+			content: "";
+			width: 112px;
+			height: 115px;
+			background-image: url("../img/avatar_full.png");
+			background-size: cover;
+			position: absolute;
+			left: -30px;
+			top: -41px;
+			z-index: 1;
+		}
+
+		#contentParent button.close {
+			opacity: 1;
+			position: absolute;
+			top: 8px;
+			right: 10px;
+			z-index: 1;
+		}
+
+		#contentParent button.close span {
+			text-shadow: none;
+			color: white;
+			font-size: 12px;
+		}
+
+		#contentParent.responsive-columns-wrapper {
+			display: -ms-flexbox;
+			display: -webkit-flex;
+			display: flex;
+			flex-direction: row;
+			-ms-display: flex;
+			-ms-flex-direction: row;
+		}
+
+		#contentParent .responsive-column {
+			-webkit-flex: 1;
+			-ms-flex: 1;
+			flex: 1;
+			overflow: auto;
+		}
+
+		#contentParent #chat-column-holder {
+			text-align: center;
+		}
+
+		#contentParent .chat-column {
+			height: 100%;
+			padding: 0;
+			background-color: #fff;
+			text-align: left;
+			width: 350px;
+			position: relative;
+			border-top: solid 1px #006BB7;
+			border-left: solid 1px #006BB7;
+			border-right: solid 1px #006BB7;
+			border-top-right-radius: 5px;
+			border-top-left-radius: 5px;
+		}
+
+		#contentParent .chat-header {
+			padding: 7px 10px;
+			background-color: #b81e24;
+			color: #fff;
+			width: 100%;
+			font-size: 14px;
+			position: relative;
+			display: block !important;
+			border: solid 1px #b81e24;
+			cursor: pointer;
+		}
+
+		#contentParent .chat-header>span {
+			padding-left: 80px;
+		}
+
+		#contentParent.no-height .chat-header span {
+			padding-left: 0;
+		}
+
+		#contentParent #scrollingChat {
+			margin: 5px;
+			overflow-y: auto;
+			overflow-x: hidden;
+			height: calc(100% - 85px);
+			padding-top: 40px;
+		}
+
+		#contentParent .message-inner {
+			opacity: 0;
+			margin-top: 0.9375rem;
+			-webkit-transition-property: opacity, margin-top;
+			-webkit-transition-duration: 0.75s;
+			-webkit-transition-timing-function: ease-in;
+			-moz-transition-property: opacity, margin-top;
+			-moz-transition-duration: 0.75s;
+			-moz-transition-timing-function: ease-in;
+			-o-transition-property: opacity, margin-top;
+			-o-transition-duration: 0.75s;
+			-o-transition-timing-function: ease-in;
+			-ms-transition-property: opacity, margin-top;
+			-ms-transition-duration: 0.75s;
+			-ms-transition-timing-function: ease-in;
+			transition-property: opacity, margin-top;
+			transition-duration: 0.75s;
+			transition-timing-function: ease-in;
+		}
+
+		#contentParent .message-inner p {
+			line-height: 1.5;
+		}
+
+		#contentParent .areaList li {
+			font-size: 12px;
+		}
+
+		#contentParent .load .message-inner {
+			opacity: 1;
+			margin-top: 0.3125rem;
+		}
+
+		#contentParent .from-user {
+			text-align: right;
+		}
+
+		#contentParent .from-user .message-inner {
+			position: relative;
+			font-size: 14px;
+			color: #fff;
+			letter-spacing: 0.015rem;
+			line-height: 1.3125rem;
+			background: #EC1C23;
+			border-radius: 1.25rem;
+			border-bottom-right-radius: 0;
+			text-align: left;
+			display: inline-block;
+			margin-left: 2.5rem;
+			min-width: 2.5rem;
+		}
+
+		#contentParent .from-user .message-inner p {
+			margin: 0.3125rem;
+			padding: 0 0.9375rem;
+		}
+
+		#contentParent .from-user .message-inner:before,
+		#contentParent .from-user .message-inner:after {
+			content: "";
+			position: absolute;
+		}
+
+
+		#contentParent .from-user .message-inner:before {
+			z-index: -2;
+			bottom: -0.375rem;
+			right: 0;
+			height: 0.375rem;
+			width: 0.5rem;
+			background: #1cb3a0;
+		}
+
+		#contentParent .from-user .message-inner:after {
+			z-index: -1;
+			bottom: -0.5rem;
+			right: 0;
+			height: 0.5rem;
+			width: 0.5rem;
+			background: #fff;
+			border-top-right-radius: 1.25rem;
+		}
+
+		#contentParent .from-watson .message-inner {
+			position: relative;
+			border-radius: 1.5625rem;
+			font-size: 14px;
+			color: #B5B5B5;
+			letter-spacing: 0.015rem;
+			line-height: 1.3125rem;
+		}
+
+		#contentParent .from-watson.latest.top p:before {
+			content: ".";
+			color: #9855D4;
+			background-image: url("../img/marker_image.png");
+			background-size: cover;
+			position: absolute;
+			z-index: 2;
+			left: 3px;
+			width: 4px;
+			height: 18px;
+		}
+
+		#contentParent .from-watson.latest .message-inner {
+			color: #323232;
+		}
+
+		#contentParent .from-watson p {
+			margin: 0.3125rem;
+			padding: 0 20px;
+		}
+
+		#contentParent #textInput {
+			border: none;
+			outline: none;
+			background: transparent;
+			font-size: 14px;
+			color: #323232;
+			letter-spacing: 0.015rem;
+			line-height: 1.3125rem;
+			height: 30px;
+			font-weight: 400;
+			max-width: 100%;
+			padding-left: 0.125rem;
+			margin-bottom: -0.125rem;
+			font-family: Arial, sans-serif;
+
+		}
+
+		#contentParent #textInput.underline {
+			border-bottom: 2px solid #b81e24;
+		}
+
+		#contentParent ::-webkit-input-placeholder {
+			color: #B5B5B5;
+		}
+
+		#contentParent ::-moz-placeholder {
+			color: #B5B5B5;
+			opacity: 1;
+		}
+
+		#contentParent input:-moz-placeholder {
+			color: #B5B5B5;
+			opacity: 1;
+		}
+
+		#contentParent :-ms-input-placeholder {
+			color: #B5B5B5;
+		}
+
+		#contentParent ::-ms-clear {
+			display: none;
+		}
+
+		#contentParent .inputOutline {
+			display: block;
+			border-bottom: 0.0625rem solid #aeaeae;
+			margin-left: 0.5rem;
+			margin-right: 0.5rem;
+			position: relative;
+		}
+
+		#textInputDummy {
+			position: absolute;
+			white-space: pre;
+			top: 0;
+			left: -1000%;
+			opacity: 0;
+		}
+
+		#gabModal img {
+			max-width: 100%;
+		}
+
+
+		@media (max-width: 1200px) {
+			#contentParent {
+				height: 450px;
+			}
+
+			#contentParent .chat-column {
+				width: 450px;
+			}
+
+			#contentParentp {
+				font-size: 17px;
+				line-height: 1.5;
+			}
+
+			#contentParent .chat-header>span {
+				font-size: 18px;
+			}
+
+			#contentParent #textInput {
+				font-size: 17px;
+			}
+		}
+
+		@media (max-width: 768px) {
+			#contentParent .chat-column {
+				width: 300px;
+			}
+
+			#contentParent {
+				right: 20px;
+			}
+		}
+
+		.fade.in {
+			opacity: 1;
+		}
+
+		.checkbox {
+			padding-left: 20px;
+		}
+
+		.checkbox label {
+			display: inline-block;
+			position: relative;
+			padding-left: 5px;
+		}
+
+		.checkbox label::before {
+			content: "";
+			display: inline-block;
+			position: absolute;
+			width: 17px;
+			height: 17px;
+			left: 0;
+			margin-left: -20px;
+			border: 1px solid #cccccc;
+			border-radius: 3px;
+			background-color: #fff;
+			-webkit-transition: border 0.15s ease-in-out, color 0.15s ease-in-out;
+			-o-transition: border 0.15s ease-in-out, color 0.15s ease-in-out;
+			transition: border 0.15s ease-in-out, color 0.15s ease-in-out;
+		}
+
+		.checkbox label::after {
+			display: inline-block;
+			position: absolute;
+			width: 16px;
+			height: 16px;
+			left: 0;
+			top: 0;
+			margin-left: -20px;
+			padding-left: 3px;
+			padding-top: 1px;
+			font-size: 11px;
+			color: #555555;
+		}
+
+		.checkbox input[type="checkbox"] {
+			opacity: 0;
+		}
+
+		.checkbox input[type="checkbox"]:focus+label::before {
+			outline: thin dotted;
+			outline: 5px auto -webkit-focus-ring-color;
+			outline-offset: -2px;
+		}
+
+		.checkbox input[type="checkbox"]:checked+label::after {
+			font-family: FontAwesome;
+			content: "\f00c";
+		}
+
+		.checkbox input[type="checkbox"]:disabled+label {
+			opacity: 0.65;
+		}
+
+		.checkbox input[type="checkbox"]:disabled+label::before {
+			background-color: #eeeeee;
+			cursor: not-allowed;
+		}
+
+		.checkbox.checkbox-circle label::before {
+			border-radius: 50%;
+		}
+
+		.checkbox.checkbox-inline {
+			margin-top: 0;
+		}
+
+		.checkbox-info input[type="checkbox"]:checked+label::before {
+			background-color: #b81e24;
+			border-color: #b81e24;
+		}
+
+		.checkbox-info input[type="checkbox"]:checked+label::after {
+			color: #fff;
+		}
+
+		input[type="button"] {
+			background: none;
+			color: inherit;
+			border: none;
+			padding: 0;
+			font: inherit;
+			cursor: pointer;
+			outline: inherit;
+			margin-top: 10px;
+			width: 60%;
+			height: 35px;
+			background-color: #b81e24;
+			border-radius: 5px;
+			color: white;
+			font-size: 15px;
+			margin-left: 20%;
+		}
+
+		input[type="button"]:disabled,
+		input[type="button"][disabled] {
+			border: 1px solid #999999;
+			background-color: #cccccc;
+			color: #666666;
+		}
+
+		.modal-content #cabecalho {
+			font-family: 'Lobster', cursive;
+			color: white;
+			margin: -20px -8px;
+			background-color: rgba(0, 0, 0, 0);
+			border-radius: 5px 5px 0px 0px;
+			height: 60px;
+			padding-top: 15px !important;
+			font-size: 24px;
+		}
+
+		.modal-content #texto {
+			font-family: Calibri;
+			font-size: 20px;
+			min-height: 200px;
+			font-family: Calibri;
+		}
+
+		.modal-content h4#msg_email,
+		.modal-content .preco_churrasco {
+			color: #fff;
+			font-family: Calibri;
+			font-size: 20px;
+			font-family: Calibri;
+			font-weight: bold;
+			text-align: center;
+		}
+
+		.modal-content img {
+			width: 95%;
+			border-radius: 5px;
+		}
+
+		.modal-footer button {
+			background-color: #b81e24 !important;
+			border-color: #b81e24 !important;
+		}
+
+		.modal-content #aviso {
+			line-height: 20px;
+			text-align: justify;
+			font-family: Calibri;
+		}
+
+		.modal-footer .btn-primary.fechar {
+			margin-top: 20px;
+		}
+
+		#contentParent:before {
+			border-radius: 50%;
+		}
+
+		#contentParent .from-watson.latest.top p:before {
+			color: #b81e24;
+		}
+
+		#contentParent .chat-column {
+			border-color: #b81e24 !important;
+		}
+
+		.tooltipster-sidetip.tooltipster-light.tooltipster-light-customized .tooltipster-box {
+			border: 2px solid #b81e24;
+			border-radius: 6px;
+			box-shadow: 5px 5px 2px 0 rgba(0, 0, 0, 0.4);
+			background-color: white;
+		}
+
+		.tooltipster-sidetip.tooltipster-light.tooltipster-light-customized .tooltipster-arrow {
+			display: none;
+		}
+
+		.modal-content {
+			margin-top: 350px !important;
+			background-image: url('../img/bbq.jpg');
+			background-color: rgb(0, 0, 0, 0.5) !important;
+			background-size: cover;
+		}
+
+		#accordion .card {
+			margin: 0 auto;
+			float: none !important;
+			background-color: rgba(0, 0, 0, 0.5);
+			width: 85%;
+		}
+
+		#accordion .card-header {
+			background-color: #b81e24;
+			border-radius: 0;
+			border: none;
+			text-align: center;
+		}
+
+		#accordion .card-header button {
+			width: 100%;
+			color: #fff;
+		}
+
+		.modal-content .card-body {
+			color: #fff;
+			min-height: 280px;
+		}
+
+		.modal-dialog {
+			max-width: 650px !important;
+		}
+
+		.modal-content #aviso,
+		.modal-content #msg_email {
+			color: #fff;
+			font-weight: bold;
+		}
+
+		.fade.in {
+			background-color: rgb(0, 0, 0, 0.5) !important;
+		}
+
+		.checkbox input {
+			width: 0 !important;
+		}
+
+		.checkbox label {
+			width: 95% !important;
+		}
+
+		.modal-body {
+			background-color: rgba(0, 0, 0, .6);
+		}
+
+		.comecar.simnao {
+			width: 45%;
+			margin-left: 0 !important;
+		}
+
+		button.duvida,
+		button#enviar {
+			display: none;
+		}
+
+
+
+		@media only screen and (max-width: 800px) {
+			#contentParent {
+				height: 95%;
+				right: 0;
+				width: 100%;
+			}
+
+			#chat-column-holder {
+				width: 100%;
+			}
+
+			#contentParent .chat-column {
+				width: 100%;
+			}
+
+			button.ocasiao {
+				width: 80%;
+				margin: auto;
+				margin-bottom: 10px;
+				border-radius: 5px 0px 0px 5px;
+			}
+
+			button.duvida {
+				width: 35px;
+				background-color: #dc3545;
+				display: inline-block;
+				border-radius: 0px 5px 5px 0px;
+				margin-left: -3px;
+			}
+
+			button.duvida:last-child {
+				margin-left: 1px;
+			}
+
+			span.ocasioes {
+				display: block;
+				text-align: center;
+			}
+
+			button#enviar {
+				display: block;
+				position: absolute;
+				right: 0;
+				bottom: 0;
+				background: none;
+				border: none;
+			}
+		}
+#customers {
+  font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+#customers td, #customers th {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+#customers tr:nth-child(even){background-color: #f2f2f2;}
+
+#customers tr:hover {background-color: #ddd;}
+
+#customers th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  background-color: #6c7ae0;
+  color: white;
+}
+	</style>
+</head>
+<body>
+	<table width="100%" border="0" cellspacing="0" cellpadding="0">
+		<tr>
+			<td align="left">
+				<div style="width: 100%;">
+					<div style="font-family: Roboto,RobotoDraft,Helvetica,Arial,sans-serif;">
+						<div
+							style="text-align:center;height: 50px;background-color: #4682B4;padding-top: 1px;border: 1px solid white;color: white; border-radius: 5px 5px 0px 0px;">
+							<h3>A Assistente Gabi atendeu o seguinte chamado:</h3>
+						</div>
+						<div style="padding-top: 10px; padding-left: 10px; min-height: 100px; background-color: beige">
+							<br>
+							<h3>Sistema: ASK</h3>						
+							<br>
+							<h3>Data: {data}</h3>
+							<br>
+							<h3>Descrição: {descricao}</h3>							
+							<br><br>
+							Atenciosamente<br>
+							Assistente Virtual
+						</div>
+					</div>
+				</div>
+			</td>
+		</tr>
+	</table>
+</body>
+
+</html>

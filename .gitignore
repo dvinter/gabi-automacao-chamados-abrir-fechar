@@ -1,0 +1,14 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/AbrirFecharChamado/AbrirFecharChamado/bin/Debug
+/AbrirFecharChamado/AbrirFecharChamado/obj/Debug
+/AbrirFecharChamado/AbrirFecharChamado/Properties
+/AbrirFecharChamado/packages/Newtonsoft.Json.12.0.2/lib
+/AbrirFecharChamado/packages/Newtonsoft.Json.12.0.2/LICENSE.md
+/AbrirFecharChamado/packages/Newtonsoft.Json.12.0.2/Newtonsoft.Json.12.0.2.nupkg
+/AbrirFecharChamado/packages/Newtonsoft.Json.12.0.2/.signature.p7s
+/AbrirFecharChamado/.vs/AbrirFecharChamado/v14/.suo
+
+*.[dD][lL][lL]
